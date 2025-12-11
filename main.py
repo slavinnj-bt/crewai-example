@@ -11,9 +11,10 @@ from opentelemetry.instrumentation.openai import OpenAIInstrumentor
 # Factory for Tracer configs
 from opentelemetry.sdk.trace import TracerProvider
 from crewai import Agent, Crew, Task, Process, LLM
+from crewai_tools import TavilySearchTool
 
 
-def setup_tracing(project_name: str = "SlavinScratchArea", experiment_name: str = "crewai-demo") -> None:
+def setup_tracing(project_name: str = "SlavinScratchArea") -> None:
     """Initialize Braintrust tracing for CrewAI and OpenAI"""
     current_provider = trace.get_tracer_provider()
     if isinstance(current_provider, TracerProvider):
@@ -38,7 +39,7 @@ def main():
 
     # Verify required env vars
     # OPENAI required for Crew, BRAINTRUST needed for submitting traces
-    required_vars = ["BRAINTRUST_API_KEY", "OPENAI_API_KEY"]
+    required_vars = ["BRAINTRUST_API_KEY", "OPENAI_API_KEY", "TAVILY_API_KEY"]
     missing_vars = [var for var in required_vars if not os.getenv(var)]
     if missing_vars:
         raise ValueError(f"Missing required environment variables: {', '.join(missing_vars)}")
@@ -48,6 +49,9 @@ def main():
 
     # Create LLM instance
     llm = LLM(model="gpt-4o-mini")
+
+    # setup web search tool
+    tavily_tool = TavilySearchTool()
 
     # Stock researcher
     researcher = Agent(
@@ -59,6 +63,7 @@ def main():
         llm=llm,
         inject_date=True,
         respect_context_window=True,
+        tools=[tavily_tool], # search the web for up-to-date financial info
         date_format="%B %d, %Y",  # Format as "May 21, 2025"
         verbose=True
     )

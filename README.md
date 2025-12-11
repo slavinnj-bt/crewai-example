@@ -15,6 +15,7 @@
    Edit `.env` and add your API keys:
    - `BRAINTRUST_API_KEY`: Your Braintrust API key
    - `BRAINTRUST_PARENT`: Format is `project_name:<your_project_name>`
+   - `TAVILY_API_KEY`: Get one at https://app.tavily.com/
    - `OPENAI_API_KEY`: Your OpenAI API key
 
 ## Run
