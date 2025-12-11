@@ -1,0 +1,5 @@
+braintrust[otel]
+crewai
+opentelemetry-instrumentation-openai
+opentelemetry-instrumentation-crewai
+python-dotenv
